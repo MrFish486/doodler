@@ -30,13 +30,14 @@
 			doodles.doodles[i].calculatePos();
 		}
 		if(Math.random() < 0.0005){ // (Random) Slow thread
-			doodles.interact();
+			if(doodles.interact()){
+				console.log("doodles interacted, [d] to dump");
+			}
 			for(let i = 0; i < doodles.interactions.length; i ++){
 				if(doodles.interactions[i].presences.every(Boolean)){
 					doodles.interactions[i].resolve();
 				}
 			}
-			console.log("doodles iteracted, [d] to dump");
 		}
 		document.getElementById("main").getContext("2d").clearRect(0, 0, window.innerWidth, window.innerHeight)
 		doodles.draw(document.getElementById("main"));
@@ -91,9 +92,9 @@
 		} else if(e.key == "d"){
 			console.log(doodles);
 		} else if(e.key == "w"){
-			for(let i = 0; i < doodles.doodles.lenght; i ++){
-				prompt("");
-				doodles.doodles[i].goto(JSON.parse(prompt(`Doodle ${i} target?`)));
+			for(let i = 0; i < doodles.doodles.length; i ++){
+				let q = JSON.parse(prompt(`Doodle#${i} target pos?`));
+				doodles.doodles[i].goto(q[0], q[1]);
 			}
 		}
 	});

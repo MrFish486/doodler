@@ -76,7 +76,7 @@ class doodle {
 		}
 		this.pos = [totalx / paths.length, totaly / paths.length];
 		this.limbs = [];
-		this.speed = 2;
+		this.speed = 50;
 		this.limbSpeed = new flex(2, 10);
 		this.interacting = false;
 		this.interaction = null;
@@ -84,7 +84,7 @@ class doodle {
 	}
 	goto(x, y, forInteraction = false){
 		var a = x - this.pos[0], b = y - this.pos[1], c = Math.hypot(a, b), d = c / this.speed, e = 0, f = setInterval(() => {
-			if((Math.round(x) == Math.round(this.pos[0]) && Math.round(y) == Math.round(this.pos[1]))){
+			if((Math.round(x) == Math.round(this.pos[0]) && Math.round(y) == Math.round(this.pos[1])) || e > 10000){
 				clearInterval(f);
 				if(forInteraction){
 					this.interaction.presences[this.interactionIndex] = true;
@@ -98,7 +98,7 @@ class doodle {
 				this.limbs[i].calculatePos();
 				this.limbs[i].rotate(this.limbs[i].pos[0], this.limbs[i].pos[1], this.limbSpeed.sample());
 			}
-			this.translate(a / c, b / c);
+			this.translate(a / d, b / d);
 			e ++;
 		}, 1);
 	}
@@ -220,7 +220,7 @@ class collection {
 		this.interactions = [];
 	}
 	interact(){
-		if(this.doodles.length == 0){
+		if(this.doodles.length < 1){
 			return false;
 		}
 		this.interactions.push(new interaction([this.doodles[Math.floor(Math.random() * this.doodles.length)], this.doodles[Math.floor(Math.random() * this.doodles.length)]], ["peaceful", "violent"][Math.floor(Math.random() * 2)], [Math.random() * window.innerWidth, Math.random() * window.innerHeight]));
