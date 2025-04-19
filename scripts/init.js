@@ -1,5 +1,6 @@
 (() => {
 	var mousedown = false;
+	var doodles = new collection([]);
 	document.oncontextmenu = () => false;
 	document.onmousedown = () => {
 		mousedown = true;
@@ -13,4 +14,10 @@
 		document.getElementById("main").height = window.innerHeight;
 	};
 	window.onresize();
+	setInterval(() => {
+		doodles.deleteResolvedInteractions();
+		if(Math.random() < 0.0005){
+			doodles.interact();
+		}
+	});
 })();
