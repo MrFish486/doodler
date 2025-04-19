@@ -76,7 +76,7 @@ class doodle {
 		}
 		this.pos = [totalx / paths.length, totaly / paths.length];
 		this.limbs = [];
-		this.speed = new flex(1, 10).samplePositive();
+		this.speed = 2;
 		this.limbSpeed = new flex(2, 10);
 		this.interacting = false;
 		this.interaction = null;
@@ -84,18 +84,21 @@ class doodle {
 	}
 	goto(x, y, forInteraction = false){
 		var a = x - this.pos[0], b = y - this.pos[1], c = Math.hypot(a, b), d = c / this.speed, e = 0, f = setInterval(() => {
-			if(e >= d){
+			if((Math.round(x) == Math.round(this.pos[0]) && Math.round(y) == Math.round(this.pos[1]))){
 				clearInterval(f);
 				if(forInteraction){
 					this.interaction.presences[this.interactionIndex] = true;
 				}
+				console.log(`target:${x},${y}`);
+				console.log(`pos   :${this.pos[0]},${this.pos[1]}\n`);
+				console.log(e);
 				return;
 			}
 			for(let i = 0; i < this.limbs.length; i ++){
 				this.limbs[i].calculatePos();
 				this.limbs[i].rotate(this.limbs[i].pos[0], this.limbs[i].pos[1], this.limbSpeed.sample());
 			}
-			this.translate(a / d, b / d);
+			this.translate(a / c, b / c);
 			e ++;
 		}, 1);
 	}
@@ -159,19 +162,19 @@ class doodle {
 	backinside(){
 		if(this.pos[0] < 0){
 			while(this.outofbounds()){
-				this.translate(5, 0);
+				this.translate(50, 0);
 			}
 		}else if(this.pos[0] > window.innerWidth){
-			while(this.outofbouds()){
-				this.translate(-5, 0);
+			while(this.outofbounds()){
+				this.translate(-50, 0);
 			}
 		}else if(this.pos[1] < 0){
 			while(this.outofbounds()){
-				this.translate(0, 5);
+				this.translate(0, 50);
 			}
 		}else if(this.pos[1] > window.innerHeight){
 			while(this.outofbounds()){
-				this.translate(0, -5);
+				this.translate(0, -50);
 			}
 		}
 	}

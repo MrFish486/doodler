@@ -27,6 +27,7 @@
 				doodles.doodles[i].idle();
 			}
 			doodles.doodles[i].backinside();
+			doodles.doodles[i].calculatePos();
 		}
 		if(Math.random() < 0.0005){ // (Random) Slow thread
 			doodles.interact();
@@ -35,10 +36,20 @@
 					doodles.interactions[i].resolve();
 				}
 			}
-			console.log(doodles);
+			console.log("doodles iteracted, [d] to dump");
 		}
 		document.getElementById("main").getContext("2d").clearRect(0, 0, window.innerWidth, window.innerHeight)
 		doodles.draw(document.getElementById("main"));
+		if(creation.pathInProgess){
+			let c = new path(creation.currentPath, 10);
+			c.draw(document.getElementById("main"), "red");
+		}
+		if(creation.paths.length > 0){
+			for(let i = 0; i < creation.paths.length; i ++){
+				let q = new path(creation.paths[i], 10);
+				q.draw(document.getElementById("main"), "blue");
+		 	}
+		}
 	});
 	setInterval(() => { // Drawing thread
 		// Render progress; not working right now
@@ -73,6 +84,17 @@
 			n.limbs = n.findPaths(Math.floor(creation.paths.length / 2));
 			doodles.doodles.push(n);
 			creation = {paths : [], currentPath : null, pathInProgress : false};
+		} else if(e.key == "q"){
+			for(let i = 0; i < doodles.interactions.length; i ++){
+				doodles.interactions[i].resolve();
+			}
+		} else if(e.key == "d"){
+			console.log(doodles);
+		} else if(e.key == "w"){
+			for(let i = 0; i < doodles.doodles.lenght; i ++){
+				prompt("");
+				doodles.doodles[i].goto(JSON.parse(prompt(`Doodle ${i} target?`)));
+			}
 		}
 	});
 })();
